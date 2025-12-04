@@ -1,0 +1,6 @@
+torch
+numpy
+torchview
+networkx
+graphviz
+safetensors
