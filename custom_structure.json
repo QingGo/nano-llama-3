@@ -1,0 +1,1101 @@
+{
+    "embedding.weight": [
+        128256,
+        4096
+    ],
+    "lm_head.weight": [
+        128256,
+        4096
+    ],
+    "norm.weight": [
+        4096
+    ],
+    "transformer_blocks.0.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.0.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.0.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.0.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.0.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.0.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.0.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.0.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.0.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.1.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.1.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.1.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.1.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.1.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.1.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.1.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.1.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.1.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.10.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.10.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.10.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.10.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.10.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.10.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.10.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.10.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.10.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.11.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.11.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.11.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.11.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.11.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.11.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.11.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.11.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.11.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.12.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.12.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.12.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.12.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.12.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.12.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.12.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.12.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.12.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.13.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.13.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.13.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.13.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.13.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.13.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.13.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.13.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.13.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.14.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.14.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.14.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.14.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.14.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.14.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.14.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.14.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.14.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.15.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.15.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.15.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.15.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.15.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.15.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.15.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.15.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.15.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.16.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.16.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.16.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.16.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.16.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.16.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.16.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.16.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.16.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.17.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.17.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.17.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.17.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.17.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.17.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.17.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.17.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.17.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.18.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.18.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.18.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.18.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.18.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.18.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.18.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.18.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.18.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.19.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.19.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.19.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.19.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.19.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.19.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.19.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.19.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.19.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.2.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.2.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.2.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.2.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.2.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.2.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.2.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.2.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.2.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.20.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.20.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.20.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.20.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.20.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.20.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.20.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.20.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.20.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.21.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.21.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.21.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.21.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.21.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.21.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.21.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.21.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.21.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.22.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.22.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.22.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.22.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.22.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.22.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.22.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.22.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.22.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.23.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.23.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.23.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.23.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.23.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.23.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.23.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.23.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.23.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.24.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.24.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.24.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.24.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.24.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.24.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.24.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.24.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.24.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.25.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.25.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.25.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.25.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.25.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.25.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.25.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.25.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.25.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.26.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.26.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.26.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.26.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.26.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.26.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.26.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.26.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.26.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.27.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.27.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.27.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.27.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.27.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.27.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.27.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.27.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.27.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.28.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.28.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.28.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.28.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.28.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.28.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.28.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.28.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.28.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.29.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.29.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.29.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.29.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.29.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.29.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.29.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.29.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.29.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.3.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.3.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.3.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.3.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.3.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.3.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.3.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.3.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.3.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.30.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.30.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.30.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.30.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.30.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.30.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.30.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.30.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.30.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.31.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.31.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.31.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.31.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.31.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.31.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.31.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.31.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.31.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.4.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.4.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.4.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.4.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.4.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.4.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.4.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.4.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.4.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.5.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.5.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.5.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.5.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.5.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.5.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.5.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.5.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.5.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.6.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.6.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.6.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.6.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.6.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.6.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.6.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.6.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.6.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.7.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.7.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.7.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.7.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.7.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.7.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.7.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.7.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.7.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.8.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.8.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.8.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.8.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.8.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.8.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.8.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.8.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.8.norm2.weight": [
+        4096
+    ],
+    "transformer_blocks.9.attention.w_k.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.9.attention.w_o.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.9.attention.w_q.weight": [
+        4096,
+        4096
+    ],
+    "transformer_blocks.9.attention.w_v.weight": [
+        1024,
+        4096
+    ],
+    "transformer_blocks.9.ffn.swiglu.down_proj.weight": [
+        4096,
+        14336
+    ],
+    "transformer_blocks.9.ffn.swiglu.gate_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.9.ffn.swiglu.up_proj.weight": [
+        14336,
+        4096
+    ],
+    "transformer_blocks.9.norm1.weight": [
+        4096
+    ],
+    "transformer_blocks.9.norm2.weight": [
+        4096
+    ]
+}
