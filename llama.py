@@ -168,7 +168,7 @@ def load_safetensors_weights(
     model_params = dict(model.named_parameters())
 
     if load_all:
-        layers_to_load = list(model.named_parameters())
+        layers_to_load = list(model_params.keys())
 
     for layer_name in layers_to_load:
         official_name = map_weight_name(layer_name)
@@ -179,7 +179,8 @@ def load_safetensors_weights(
         with safe_open(safetensors_path, framework="pt", device=device) as f:
             params = f.get_tensor(official_name)
             # 更新模型状态字典中的权重
-            model_params[layer_name].copy_(params.to(device))
+            with torch.no_grad():
+                model_params[layer_name].copy_(params.to(device))
             print(f"Loaded {official_name} from {safetensors_path}")
 
 def weight_stats(weight: torch.Tensor) -> None:

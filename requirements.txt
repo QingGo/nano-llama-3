@@ -27,3 +27,4 @@ tqdm
 transformers
 typing-extensions
 urllib3
+accelerate
