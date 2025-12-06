@@ -8,10 +8,11 @@ import torch.nn.functional as F
 
 
 class RMSNorm(nn.Module):
-    def __init__(self, dim: int, eps: float = 1e-6):
+    def __init__(self, dim: int, eps: float = 1e-6, dtype: torch.dtype = torch.bfloat16):
         super().__init__()
         self.eps = eps
-        self.weight = nn.Parameter(torch.ones(dim))
+        self.weight = nn.Parameter(torch.ones(dim, dtype=dtype))
+        self.dtype = dtype
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 计算均方根
@@ -21,19 +22,20 @@ class RMSNorm(nn.Module):
 
 
 class SwiGLU(nn.Module):
-    def __init__(self, dim_in: int, dim_out: int, hidden_dim: int):
+    def __init__(self, dim_in: int, dim_out: int, hidden_dim: int, dtype: torch.dtype = torch.bfloat16):
         """
         实现 SwiGLU 激活函数
         Args:
             dim_in: 输入维度
             dim_out: 输出维度
             hidden_dim: 隐藏层维度
+            dtype: 参数数据类型，默认torch.bfloat16
         """
         super().__init__()
         # 都不使用 bias
-        self.up_proj = nn.Linear(dim_in, hidden_dim, bias=False)
-        self.gate_proj = nn.Linear(dim_in, hidden_dim, bias=False)
-        self.down_proj = nn.Linear(hidden_dim, dim_out, bias=False)
+        self.up_proj = nn.Linear(dim_in, hidden_dim, bias=False, dtype=dtype)
+        self.gate_proj = nn.Linear(dim_in, hidden_dim, bias=False, dtype=dtype)
+        self.down_proj = nn.Linear(hidden_dim, dim_out, bias=False, dtype=dtype)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # SwiGLU 激活函数

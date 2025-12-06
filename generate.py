@@ -96,13 +96,7 @@ if __name__ == "__main__":
     # 使用自定义的 Llama 模型进行预测
     device = get_device()
     print(f"Using device: {device}")
-    custom_model = Llama(
-        vocab_size=128256,
-        hidden_size=4096,
-        ffn_hidden_size=14336,
-        heads=32,
-        groups=8,
-    )
+    custom_model = Llama(vocab_size=128256, hidden_size=4096, ffn_hidden_size=14336, heads=32, groups=8, dtype=torch.bfloat16)
     custom_model.to(device)
     index_path = model_path + "/model.safetensors.index.json"
     with open(index_path, "r") as f:

@@ -23,6 +23,7 @@ class Llama(nn.Module):
         heads: int,
         groups: Optional[int] = None,
         dropout: float = 0.0,
+        dtype: torch.dtype = torch.bfloat16,
     ):
         """
         实现Llama模型，包含多个Transformer块
@@ -33,18 +34,20 @@ class Llama(nn.Module):
             heads: 头数
             groups: 分组数
             dropout: dropout概率
+            dtype: 参数数据类型，默认torch.bfloat16
         """
         super().__init__()
-        self.embedding = nn.Embedding(vocab_size, hidden_size)
+        self.dtype = dtype
+        self.embedding = nn.Embedding(vocab_size, hidden_size, dtype=dtype)
         self.transformer_blocks = nn.ModuleList(
             [
-                TransformerBlock(hidden_size, ffn_hidden_size, heads, groups, dropout)
+                TransformerBlock(hidden_size, ffn_hidden_size, heads, groups, dropout, dtype=dtype)
                 for _ in range(32)  # llama3-8B 有 32 个Transformer块
             ]
         )
-        self.norm = RMSNorm(hidden_size)
+        self.norm = RMSNorm(hidden_size, dtype=dtype)
         # 映射回词汇表大小，不需要 bias
-        self.lm_head = nn.Linear(hidden_size, vocab_size, bias=False)
+        self.lm_head = nn.Linear(hidden_size, vocab_size, bias=False, dtype=dtype)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """

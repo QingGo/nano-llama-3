@@ -18,6 +18,7 @@ class Attention(nn.Module):
         heads: int,
         groups: Optional[int] = None,
         dropout: float = 0.0,
+        dtype: torch.dtype = torch.bfloat16,
     ):
         """
         实现多头注意力机制，支持 MHA，MQA，GQA
@@ -26,6 +27,7 @@ class Attention(nn.Module):
             heads: 头数
             groups: 分组数
             dropout: dropout概率
+            dtype: 参数数据类型，默认torch.bfloat16
         """
         super().__init__()
         # 确保hidden_size是heads的倍数
@@ -41,10 +43,10 @@ class Attention(nn.Module):
         kv_dims = self.head_dim * groups
 
         # 注意，这里投影都不需要 bias，避免对 RoPE 进行干扰，且 RMSNorm 也证明 bias 不重要
-        self.w_q = nn.Linear(hidden_size, hidden_size, bias=False)
-        self.w_k = nn.Linear(hidden_size, kv_dims, bias=False)
-        self.w_v = nn.Linear(hidden_size, kv_dims, bias=False)
-        self.w_o = nn.Linear(hidden_size, hidden_size, bias=False)  # 输出投影层
+        self.w_q = nn.Linear(hidden_size, hidden_size, bias=False, dtype=dtype)
+        self.w_k = nn.Linear(hidden_size, kv_dims, bias=False, dtype=dtype)
+        self.w_v = nn.Linear(hidden_size, kv_dims, bias=False, dtype=dtype)
+        self.w_o = nn.Linear(hidden_size, hidden_size, bias=False, dtype=dtype)  # 输出投影层
         self.dropout = nn.Dropout(dropout)
 
     def forward(
@@ -119,17 +121,17 @@ class Attention(nn.Module):
 
 
 class FeedForward(nn.Module):
-    def __init__(self, input_size: int, hidden_size: int):
+    def __init__(self, input_size: int, hidden_size: int, dtype: torch.dtype = torch.bfloat16):
         """
         实现前馈网络，只包含 SwiGLU 激活函数
         Args:
-
             hidden_size: 隐藏层维度
             dropout: dropout概率
+            dtype: 参数数据类型，默认torch.bfloat16
         """
         super().__init__()
         # 注意这里 SwiGLU 输入输出维度都是 input_size，中间升维成 hidden_size 和门控逐元素相乘
-        self.swiglu = SwiGLU(input_size, input_size, hidden_size)
+        self.swiglu = SwiGLU(input_size, input_size, hidden_size, dtype=dtype)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.swiglu(x)
@@ -144,21 +146,23 @@ class TransformerBlock(nn.Module):
         heads: int,
         groups: Optional[int] = None,
         dropout: float = 0.0,
+        dtype: torch.dtype = torch.bfloat16,
     ):
         """
-        实现Transformer块，包含自注意力层和前馈网络
+        实现 Transformer 块
         Args:
             hidden_size: 隐藏层维度
             ffn_hidden_size: 前馈网络隐藏层维度
             heads: 头数
             groups: 分组数
             dropout: dropout概率
+            dtype: 参数数据类型，默认torch.bfloat16
         """
         super().__init__()
-        self.attention = Attention(hidden_size, heads, groups, dropout)
-        self.ffn = FeedForward(hidden_size, ffn_hidden_size)
-        self.norm1 = RMSNorm(hidden_size)
-        self.norm2 = RMSNorm(hidden_size)
+        self.attention = Attention(hidden_size, heads, groups, dropout, dtype=dtype)
+        self.ffn = FeedForward(hidden_size, ffn_hidden_size, dtype=dtype)
+        self.norm1 = RMSNorm(hidden_size, dtype=dtype)
+        self.norm2 = RMSNorm(hidden_size, dtype=dtype)
 
     def forward(
         self,
