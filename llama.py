@@ -168,7 +168,7 @@ def load_safetensors_weights(
     model_params = dict(model.named_parameters())
 
     if load_all:
-        layers_to_load = list(model.named_parameters().keys())
+        layers_to_load = list(model.named_parameters())
 
     for layer_name in layers_to_load:
         official_name = map_weight_name(layer_name)
