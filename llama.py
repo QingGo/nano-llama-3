@@ -164,8 +164,11 @@ def load_safetensors_weights(
         load_all: 是否加载所有权重，默认为 False
         layers_to_load: 如果 load_all 为 False，指定要加载的层名称列表
     """
+
+    model_params = dict(model.named_parameters())
+
     if load_all:
-        layers_to_load = model.named_parameters().keys()
+        layers_to_load = list(model.named_parameters().keys())
 
     for layer_name in layers_to_load:
         official_name = map_weight_name(layer_name)
@@ -176,7 +179,7 @@ def load_safetensors_weights(
         with safe_open(safetensors_path, framework="pt", device=device) as f:
             params = f.get_tensor(official_name)
             # 更新模型状态字典中的权重
-            model.state_dict()[layer_name].copy_(params.to(device))
+            model_params[layer_name].copy_(params.to(device))
             print(f"Loaded {official_name} from {safetensors_path}")
 
 def weight_stats(weight: torch.Tensor) -> None:
