@@ -6,6 +6,7 @@ import json
 import gc
 
 from llama import Llama, load_safetensors_weights
+from util import precompute_freqs_cis
 
 
 def get_device():
@@ -124,9 +125,10 @@ if __name__ == "__main__":
     )
     custom_model.eval()
     # 传入 tt_tokens
+    freqs_cis = precompute_freqs_cis(4096, len(tt_tokens), theta=500000)
     with torch.no_grad():
         tt_input_tensor = torch.tensor([tt_tokens], device=device)
-        tt_output = custom_model(tt_input_tensor)
+        tt_output = custom_model(tt_input_tensor, freqs_cis)
         print(tt_output)
     # 从 内存卸载 custom_model
     del custom_model

@@ -49,16 +49,18 @@ class Llama(nn.Module):
         # 映射回词汇表大小，不需要 bias
         self.lm_head = nn.Linear(hidden_size, vocab_size, bias=False, dtype=dtype)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(self, x: torch.Tensor, freqs_cis: Optional[torch.Tensor] = None, mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         x: 输入张量，形状为 (batch_size, seq_len)
+        freqs_cis: 预计算的旋转位置编码，形状为 (seq_len, head_dim * 2)
+        mask: 注意力掩码，形状为 (batch_size, 1, seq_len, seq_len)
         """
         # 嵌入层
         x = self.embedding(x)
 
         # Transformer块
         for block in self.transformer_blocks:
-            x = block(x)
+            x = block(x, freqs_cis, mask)
 
         # 归一化层
         x = self.norm(x)
