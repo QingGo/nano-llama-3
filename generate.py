@@ -96,46 +96,49 @@ if __name__ == "__main__":
     # 使用自定义的 Llama 模型进行预测
     device = get_device()
     print(f"Using device: {device}")
-    custom_model = Llama(vocab_size=128256, hidden_size=4096, ffn_hidden_size=14336, heads=32, groups=8, dtype=torch.bfloat16)
-    custom_model.to(device)
-    index_path = model_path + "/model.safetensors.index.json"
-    with open(index_path, "r") as f:
-        weight_map = json.load(f)["weight_map"]
-    load_safetensors_weights(
-        custom_model,
-        model_path,
-        weight_map,
-        device,
-        True,
-    )
-    custom_model.eval()
-    # 传入 tt_tokens
-    with torch.no_grad():
-        tt_output = custom_model(torch.tensor([tt_tokens], device=device))
-        print(tt_output)
-    # 从 内存卸载 custom_model
-    del custom_model
-    if device == "cuda":
-        torch.cuda.empty_cache()
+    # 使用上下文管理器，告诉 PyTorch 接下来的操作都在 device 上进行
+    # 而不是 model.to(device)，内存占用翻倍，同时 CPU 上有一份，GPU 上有一份
+    with torch.device(device):
+        custom_model = Llama(vocab_size=128256, hidden_size=4096, ffn_hidden_size=14336, heads=32, groups=8, dtype=torch.bfloat16)
+        custom_model.to(device)
+        index_path = model_path + "/model.safetensors.index.json"
+        with open(index_path, "r") as f:
+            weight_map = json.load(f)["weight_map"]
+        load_safetensors_weights(
+            custom_model,
+            model_path,
+            weight_map,
+            device,
+            True,
+        )
+        custom_model.eval()
+        # 传入 tt_tokens
+        with torch.no_grad():
+            tt_output = custom_model(torch.tensor([tt_tokens], device=device))
+            print(tt_output)
+        # 从 内存卸载 custom_model
+        del custom_model
+        if device == "cuda":
+            torch.cuda.empty_cache()
 
-    # 使用 Hugging Face 模型进行预测
-    # 需要指定 torch_dtype，默认行为通常是加载为 float32
-    hf_model = AutoModelForCausalLM.from_pretrained(
-        model_path, local_files_only=True, torch_dtype=torch.bfloat16
-    )
-    hf_model.to(device)
-    with torch.no_grad():
-        hf_output_obj = hf_model(torch.tensor([hf_tokens], device=device))
-        hf_output = hf_output_obj.logits
-        print(hf_output)
+        # 使用 Hugging Face 模型进行预测
+        # 需要指定 torch_dtype，默认行为通常是加载为 float32
+        hf_model = AutoModelForCausalLM.from_pretrained(
+            model_path, local_files_only=True, torch_dtype=torch.bfloat16
+        )
+        hf_model.to(device)
+        with torch.no_grad():
+            hf_output_obj = hf_model(torch.tensor([hf_tokens], device=device))
+            hf_output = hf_output_obj.logits
+            print(hf_output)
 
-    # 对比 tt_output 和 hf_output
-    assert tt_output.shape == hf_output.shape, (
-        "自定义模型和 Hugging Face 模型输出形状不一致"
-    )
-    assert torch.allclose(tt_output, hf_output, atol=1e-5), (
-        "自定义模型和 Hugging Face 模型输出数值不一致"
-    )
+        # 对比 tt_output 和 hf_output
+        assert tt_output.shape == hf_output.shape, (
+            "自定义模型和 Hugging Face 模型输出形状不一致"
+        )
+        assert torch.allclose(tt_output, hf_output, atol=1e-5), (
+            "自定义模型和 Hugging Face 模型输出数值不一致"
+        )
 
     # 解码
     tt_decoded = tt_tokenizer.decode(tt_tokens)
