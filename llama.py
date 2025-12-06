@@ -6,7 +6,7 @@ from typing import Optional, List
 import torch
 import torch.nn as nn
 from torchview import draw_graph
-from safetensors.torch import load_file, safe_open
+from safetensors.torch import safe_open
 import json
 import re
 

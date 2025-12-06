@@ -9,3 +9,9 @@ wheels/
 # Virtual environments
 .venv
 llama3_structure_meta
+
+# Tokenizer files for local test
+tokenizer.model
+special_tokens_map.json 
+tokenizer.json 
+tokenizer_config.json
