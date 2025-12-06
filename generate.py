@@ -71,8 +71,10 @@ def load_llama3_tokenizer(model_path):
 if __name__ == "__main__":
     # 可以用 modelscope 单独下载词表文件，用于本地测试
     # modelscope download --model LLM-Research/Meta-Llama-3-8B special_tokens_map.json tokenizer.json tokenizer_config.json original/tokenizer.model --local_dir ./
-    tt_model_file = "./tokenizer.model"
-    model_path = "./"
+    # tt_model_file = "./tokenizer.model"
+    # model_path = "./"
+    model_path = "./llama3-8B"    
+    tt_model_file = model_path + "/original/tokenizer.model"
     tt_tokenizer = load_llama3_tokenizer(tt_model_file)
     print(f"tiktoken 词表大小: {tt_tokenizer.n_vocab}")  # 应该是 128256
     hf_tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
@@ -92,7 +94,8 @@ if __name__ == "__main__":
     assert tt_tokens == hf_tokens, "tiktoken 和 Hugging Face tokenizer 编码结果不一致"
 
     # 使用自定义的 Llama 模型进行预测
-    device = "cpu" if torch.backends.mps.is_available() else "cuda"
+    device = get_device()
+    print(f"Using device: {device}")
     custom_model = Llama(
         vocab_size=128256,
         hidden_size=4096,
