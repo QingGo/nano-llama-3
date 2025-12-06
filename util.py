@@ -8,7 +8,9 @@ import torch.nn.functional as F
 
 
 class RMSNorm(nn.Module):
-    def __init__(self, dim: int, eps: float = 1e-6, dtype: torch.dtype = torch.bfloat16):
+    def __init__(
+        self, dim: int, eps: float = 1e-6, dtype: torch.dtype = torch.bfloat16
+    ):
         super().__init__()
         self.eps = eps
         self.weight = nn.Parameter(torch.ones(dim, dtype=dtype))
@@ -22,7 +24,13 @@ class RMSNorm(nn.Module):
 
 
 class SwiGLU(nn.Module):
-    def __init__(self, dim_in: int, dim_out: int, hidden_dim: int, dtype: torch.dtype = torch.bfloat16):
+    def __init__(
+        self,
+        dim_in: int,
+        dim_out: int,
+        hidden_dim: int,
+        dtype: torch.dtype = torch.bfloat16,
+    ):
         """
         实现 SwiGLU 激活函数
         Args:
@@ -46,7 +54,11 @@ class SwiGLU(nn.Module):
 
 
 def precompute_freqs_cis(
-    dim: int, seq_len: int, theta: float = 10000.0
+    dim: int,
+    seq_len: int,
+    theta: float = 10000.0,
+    device: torch.device = torch.device("cpu"),
+    dtype: torch.dtype = torch.bfloat16,
 ) -> torch.Tensor:
     """
     预计算旋转位置编码的频率张量
@@ -65,10 +77,16 @@ def precompute_freqs_cis(
 
     # 生成dim/2个不同的theta值
     # theta_i = theta ^ (-2i/dim), i=0,1,...,dim/2-1
-    freqs = 1.0 / (theta ** (torch.arange(0, dim, 2)[: (dim // 2)].float() / dim))
+    freqs = 1.0 / (
+        theta
+        ** (
+            torch.arange(0, dim, 2, device=device, dtype=dtype)[: (dim // 2)].float()
+            / dim
+        )
+    )
 
     # 生成位置索引m = 0,1,...,seq_len-1
-    t = torch.arange(seq_len, device=freqs.device, dtype=torch.float32)
+    t = torch.arange(seq_len, device=device, dtype=dtype)
 
     # 计算m * theta_i，形状为 (seq_len, dim/2)
     freqs = torch.outer(t, freqs)
@@ -125,6 +143,7 @@ def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
     x_rotated = x_rotated.reshape(x.shape)
 
     return x_rotated
+
 
 def main():
     print("Hello from nano-llama-3!")

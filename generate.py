@@ -125,14 +125,16 @@ if __name__ == "__main__":
     )
     custom_model.eval()
     # 传入 tt_tokens
-    freqs_cis = precompute_freqs_cis(4096, len(tt_tokens), theta=500000)
+    freqs_cis = precompute_freqs_cis(
+        4096 // 32, len(tt_tokens), theta=500000, device=device, dtype=torch.bfloat16
+    )
     with torch.no_grad():
         tt_input_tensor = torch.tensor([tt_tokens], device=device)
         tt_output = custom_model(tt_input_tensor, freqs_cis)
         print(tt_output)
     # 从 内存卸载 custom_model
     del custom_model
-    gc.collect() # 清理 Python 垃圾回收
+    gc.collect()  # 清理 Python 垃圾回收
     if device == "cuda":
         torch.cuda.empty_cache()
 
@@ -146,7 +148,7 @@ if __name__ == "__main__":
         model_path,
         local_files_only=True,
         torch_dtype=torch.bfloat16,
-         # 优化关键：自动分配设备，直接加载进显存，且极大降低 CPU 内存消耗
+        # 优化关键：自动分配设备，直接加载进显存，且极大降低 CPU 内存消耗
         device_map=use_device_map,
         low_cpu_mem_usage=True,
     )
@@ -156,8 +158,6 @@ if __name__ == "__main__":
         hf_output_obj = hf_model(hf_input_tensor)
         hf_output = hf_output_obj.logits
         print(hf_output)
-
-
 
     # 对比 tt_output 和 hf_output
     assert tt_output.shape == hf_output.shape, (
