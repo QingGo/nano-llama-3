@@ -80,13 +80,13 @@ def precompute_freqs_cis(
     freqs = 1.0 / (
         theta
         ** (
-            torch.arange(0, dim, 2, device=device, dtype=dtype)[: (dim // 2)].float()
+            torch.arange(0, dim, 2, device=device)[: (dim // 2)].float()
             / dim
         )
     )
 
     # 生成位置索引m = 0,1,...,seq_len-1
-    t = torch.arange(seq_len, device=device, dtype=dtype)
+    t = torch.arange(seq_len, device=device)
 
     # 计算m * theta_i，形状为 (seq_len, dim/2)
     freqs = torch.outer(t, freqs)
@@ -102,7 +102,7 @@ def precompute_freqs_cis(
     freqs_cis = torch.stack([freqs_cos, freqs_sin], dim=-1)
     freqs_cis = freqs_cis.reshape(seq_len, dim)
 
-    return freqs_cis
+    return freqs_cis.to(dtype=dtype)
 
 
 def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:

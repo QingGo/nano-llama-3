@@ -104,7 +104,7 @@ class Attention(nn.Module):
 
         # 应用softmax和dropout
         attn_weights = F.softmax(
-            scores, dim=-1, dtype=scores.dtype
+            scores, dim=-1
         )  # (batch_size, heads, seq_len, seq_len)
         attn_weights = self.dropout(attn_weights)
 
