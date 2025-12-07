@@ -147,7 +147,7 @@ if __name__ == "__main__":
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_path,
         local_files_only=True,
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
         # 优化关键：自动分配设备，直接加载进显存，且极大降低 CPU 内存消耗
         device_map=use_device_map,
         low_cpu_mem_usage=True,
@@ -166,8 +166,10 @@ if __name__ == "__main__":
     )
 
     # 解码
-    tt_decoded = tt_tokenizer.decode(tt_tokens)
-    hf_decoded = hf_tokenizer.decode(hf_tokens)
+    tt_next_token_logits = tt_output[:, -1, :] # [1, 5, 128256] -> [1, 128256]
+    tt_decoded = tt_tokenizer.decode([torch.argmax(tt_next_token_logits).item()])
+    hf_next_token_logits = hf_output[:, -1, :]
+    hf_decoded = hf_tokenizer.decode([torch.argmax(hf_next_token_logits).item()])
     print(f"'{tt_decoded}' -> tiktoken 解码结果")
     print(f"'{hf_decoded}' -> HuggingFace 解码结果")
 

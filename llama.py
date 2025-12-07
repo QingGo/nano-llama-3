@@ -54,6 +54,9 @@ class Llama(nn.Module):
         x: 输入张量，形状为 (batch_size, seq_len)
         freqs_cis: 预计算的旋转位置编码，形状为 (seq_len, head_dim * 2)
         mask: 注意力掩码，形状为 (batch_size, 1, seq_len, seq_len)
+
+        输出：
+        形状为 (batch_size, seq_len, vocab_size) 的 logits 张量
         """
         # 嵌入层
         x = self.embedding(x)
