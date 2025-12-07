@@ -47,11 +47,10 @@ class SwiGLU(nn.Module):
         self.down_proj = nn.Linear(hidden_dim, dim_out, bias=False, dtype=dtype)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # SwiGLU 激活函数
         x1 = self.up_proj(x)
         x2 = self.gate_proj(x)
-        # 使用 swiglu 函数：x1 * sigmoid(x2)
-        return self.down_proj(x1 * F.silu(x2))
+        prod_fp32 = x1.float() * F.silu(x2.float())
+        return self.down_proj(prod_fp32.to(x.dtype))
 
 
 def precompute_freqs_cis(

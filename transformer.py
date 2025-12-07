@@ -101,9 +101,9 @@ class Attention(nn.Module):
             q_multi,
             k_multi,
             v_multi,
-            attn_mask=mask.float() if mask is not None else None,
+            attn_mask=None,
             dropout_p=spda_dropout,
-            is_causal=(mask is None),
+            is_causal=True,
         )
 
         # 合并头并应用输出投影
@@ -170,13 +170,13 @@ class TransformerBlock(nn.Module):
         freqs_cis: 预计算的旋转位置编码，形状为 (seq_len, head_dim * 2)
         mask: 注意力掩码，形状为 (seq_len, seq_len) 或 (batch_size, 1, seq_len, seq_len)
         """
-        # 自注意力层
+        orig_dtype = x.dtype
         attn_output = self.attention(self.norm1(x), freqs_cis, mask)
-        x = x + attn_output  # 残差连接
+        x = (x.float() + attn_output.float()).to(orig_dtype)
 
         # 前馈网络
         ffn_output = self.ffn(self.norm2(x))
-        x = x + ffn_output  # 残差连接
+        x = (x.float() + ffn_output.float()).to(orig_dtype)
 
         return x
 
