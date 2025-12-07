@@ -20,9 +20,8 @@ class RMSNorm(nn.Module):
         orig_dtype = x.dtype
         x_fp32 = x.float()
         rms = torch.sqrt(torch.mean(x_fp32 * x_fp32, dim=-1, keepdim=True) + self.eps)
-        x_scaled = (x_fp32 / rms) * self.weight.float()
-        return x_scaled.to(orig_dtype)
-
+        x_norm = x_fp32 / rms
+        return x_norm.to(orig_dtype) * self.weight
 
 class SwiGLU(nn.Module):
     def __init__(
