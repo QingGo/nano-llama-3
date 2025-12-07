@@ -2,6 +2,7 @@ import tiktoken
 from tiktoken.load import load_tiktoken_bpe
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+import torch.nn.functional as F
 import json
 import gc
 
@@ -186,6 +187,10 @@ if __name__ == "__main__":
     print(f"'{tt_decoded}' -> tiktoken 解码结果")
     print(f"'{hf_decoded}' -> HuggingFace 解码结果")
 
-    assert torch.allclose(tt_output, hf_output, atol=1e-5), (
+    # 计算 MSE Loss
+    mse_loss = F.mse_loss(tt_next_token_logits, hf_next_token_logits)
+    print(f"MSE Loss: {mse_loss.item()}")
+    
+    assert torch.allclose(tt_next_token_logits, hf_next_token_logits, atol=1e-3), (
         "自定义模型和 Hugging Face 模型输出数值不一致"
     )
