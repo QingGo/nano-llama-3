@@ -76,7 +76,7 @@ def precompute_freqs_cis(
 
     # 生成 dim/2 个不同的频率：theta_i = theta ^ (-2i/d)
     half = dim // 2
-    freqs = 1.0 / (theta ** (torch.arange(0, half, device=device).float() / dim))
+    freqs = 1.0 / (theta ** (torch.arange(0, half, device=device).float() / half))
 
     # 生成位置索引m = 0,1,...,seq_len-1
     t = torch.arange(seq_len, device=device)
