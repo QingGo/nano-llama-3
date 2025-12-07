@@ -93,26 +93,18 @@ class Attention(nn.Module):
             self.heads // self.groups, dim=1
         )  # (batch_size, heads, seq_len, head_dim)
 
-        # 计算注意力分数
         q_multi = q_multi.float()
         k_multi = k_multi.float()
         v_multi = v_multi.float()
-        scores = (
-            q_multi @ k_multi.transpose(-2, -1) / math.sqrt(self.head_dim)
-        )  # (batch_size, heads, seq_len, seq_len)
-
-        # 应用掩码
-        if mask is not None:
-            scores = scores + mask.to(scores.dtype)
-
-        # 应用softmax和dropout
-        attn_weights = F.softmax(
-            scores, dim=-1
-        )  # (batch_size, heads, seq_len, seq_len)
-        attn_weights = self.dropout(attn_weights)
-
-        # 加权求和
-        output = attn_weights @ v_multi  # (batch_size, heads, seq_len, head_dim)
+        spda_dropout = self.dropout.p if self.training else 0.0
+        output = F.scaled_dot_product_attention(
+            q_multi,
+            k_multi,
+            v_multi,
+            attn_mask=mask.float() if mask is not None else None,
+            dropout_p=spda_dropout,
+            is_causal=(mask is None),
+        )
 
         # 合并头并应用输出投影
         output = output.transpose(1, 2).reshape(
