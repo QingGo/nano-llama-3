@@ -9,7 +9,7 @@ import torch.nn.functional as F
 
 class RMSNorm(nn.Module):
     def __init__(
-        self, dim: int, eps: float = 1e-6, dtype: torch.dtype = torch.bfloat16
+        self, dim: int, eps: float = 1e-5, dtype: torch.dtype = torch.bfloat16
     ):
         super().__init__()
         self.eps = eps

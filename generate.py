@@ -128,9 +128,17 @@ if __name__ == "__main__":
     freqs_cis = precompute_freqs_cis(
         4096 // 32, len(tt_tokens), theta=500000, device=device, dtype=torch.bfloat16
     )
+    causal_mask = (
+        torch.triu(
+            torch.full((len(tt_tokens), len(tt_tokens)), float("-inf"), device=device),
+            diagonal=1,
+        )
+        .unsqueeze(0)
+        .unsqueeze(0)
+    )
     with torch.no_grad():
         tt_input_tensor = torch.tensor([tt_tokens], device=device)
-        tt_output = custom_model(tt_input_tensor, freqs_cis)
+        tt_output = custom_model(tt_input_tensor, freqs_cis, causal_mask)
         print(tt_output)
     # 从 内存卸载 custom_model
     del custom_model
@@ -166,7 +174,7 @@ if __name__ == "__main__":
     )
 
     # 解码
-    tt_next_token_logits = tt_output[:, -1, :] # [1, 5, 128256] -> [1, 128256]
+    tt_next_token_logits = tt_output[:, -1, :]  # [1, 5, 128256] -> [1, 128256]
     tt_decoded = tt_tokenizer.decode([torch.argmax(tt_next_token_logits).item()])
     hf_next_token_logits = hf_output[:, -1, :]
     hf_decoded = hf_tokenizer.decode([torch.argmax(hf_next_token_logits).item()])
@@ -176,5 +184,3 @@ if __name__ == "__main__":
     assert torch.allclose(tt_output, hf_output, atol=1e-5), (
         "自定义模型和 Hugging Face 模型输出数值不一致"
     )
-
-
