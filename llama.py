@@ -45,7 +45,7 @@ class Llama(nn.Module):
                 for _ in range(32)  # llama3-8B 有 32 个Transformer块
             ]
         )
-        self.norm = RMSNorm(hidden_size, dtype=dtype)
+        self.norm = RMSNorm(hidden_size, dtype=dtype, eps=1e-5)
         # 映射回词汇表大小，不需要 bias
         self.lm_head = nn.Linear(hidden_size, vocab_size, bias=False, dtype=dtype)
 

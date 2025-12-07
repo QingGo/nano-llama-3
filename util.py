@@ -80,6 +80,7 @@ def precompute_freqs_cis(
     freqs = 1.0 / (
         theta
         ** (
+            # .float() 会导致 dtype 转换，变成 float32
             torch.arange(0, dim, 2, device=device)[: (dim // 2)].float()
             / dim
         )
@@ -110,7 +111,7 @@ def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
     应用旋转位置编码到输入张量
 
     Args:
-        x: 输入张量，形状为 (batch_size, seq_len, dim)
+        x: 输入张量，形状为 (batch_size, groups/heads, seq_len, head_dim)
         freqs_cis: 预计算的频率张量，形状为 (seq_len, dim)
 
     Returns:

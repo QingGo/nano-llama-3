@@ -153,6 +153,7 @@ if __name__ == "__main__":
         low_cpu_mem_usage=True,
     )
 
+    hf_model.eval()
     with torch.no_grad():
         hf_input_tensor = torch.tensor([hf_tokens], device=device)
         hf_output_obj = hf_model(hf_input_tensor)
@@ -163,12 +164,15 @@ if __name__ == "__main__":
     assert tt_output.shape == hf_output.shape, (
         "自定义模型和 Hugging Face 模型输出形状不一致"
     )
-    assert torch.allclose(tt_output, hf_output, atol=1e-5), (
-        "自定义模型和 Hugging Face 模型输出数值不一致"
-    )
 
     # 解码
     tt_decoded = tt_tokenizer.decode(tt_tokens)
     hf_decoded = hf_tokenizer.decode(hf_tokens)
     print(f"'{tt_decoded}' -> tiktoken 解码结果")
     print(f"'{hf_decoded}' -> HuggingFace 解码结果")
+
+    assert torch.allclose(tt_output, hf_output, atol=1e-5), (
+        "自定义模型和 Hugging Face 模型输出数值不一致"
+    )
+
+
