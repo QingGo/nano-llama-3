@@ -17,10 +17,11 @@ class RMSNorm(nn.Module):
         self.dtype = dtype
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        # 计算均方根
-        rms = torch.sqrt(torch.mean(x**2, dim=-1, keepdim=True) + self.eps)
-        # 归一化并应用权重
-        return x / rms * self.weight
+        orig_dtype = x.dtype
+        x_fp32 = x.float()
+        rms = torch.sqrt(torch.mean(x_fp32 * x_fp32, dim=-1, keepdim=True) + self.eps)
+        x_norm = x_fp32 / rms
+        return x_norm.to(orig_dtype) * self.weight
 
 
 class SwiGLU(nn.Module):
@@ -58,7 +59,7 @@ def precompute_freqs_cis(
     seq_len: int,
     theta: float = 10000.0,
     device: torch.device = torch.device("cpu"),
-    dtype: torch.dtype = torch.bfloat16,
+    dtype: torch.dtype = torch.float32,
 ) -> torch.Tensor:
     """
     预计算旋转位置编码的频率张量
@@ -95,8 +96,8 @@ def precompute_freqs_cis(
     # 计算cos(m*theta_i)和sin(m*theta_i)，并将它们堆叠成最终的频率张量
     # 最终形状为 (seq_len, dim)
     # 对于每个位置，偶数索引是cos，奇数索引是sin
-    freqs_cos = torch.cos(freqs)
-    freqs_sin = torch.sin(freqs)
+    freqs_cos = torch.cos(freqs.float())
+    freqs_sin = torch.sin(freqs.float())
 
     # 将cos和sin交替堆叠，形成最终的freqs_cis
     # 例如，对于dim=4，形状变为 (seq_len, 2, 2)，然后reshape为 (seq_len, 4)
@@ -123,14 +124,16 @@ def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
     # 分离偶数和奇数索引的元素
     # x_even: 形状 (batch_size, seq_len, dim/2)
     # x_odd: 形状 (batch_size, seq_len, dim/2)
-    x_even = x[..., ::2]
-    x_odd = x[..., 1::2]
+    orig_dtype = x.dtype
+    x_fp32 = x.float()
+    x_even = x_fp32[..., ::2]
+    x_odd = x_fp32[..., 1::2]
 
     # 分离freqs_cis的cos和sin部分
     # freqs_cos: 形状 (seq_len, dim/2)
     # freqs_sin: 形状 (seq_len, dim/2)
-    freqs_cos = freqs_cis[..., ::2]
-    freqs_sin = freqs_cis[..., 1::2]
+    freqs_cos = freqs_cis.float()[..., ::2]
+    freqs_sin = freqs_cis.float()[..., 1::2]
 
     # 应用旋转公式：
     # x_rotated_even = x_even * cos - x_odd * sin
@@ -141,9 +144,9 @@ def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
     # 将旋转后的偶数和奇数部分重新组合
     # 使用stack和reshape来恢复原始形状
     x_rotated = torch.stack([x_rotated_even, x_rotated_odd], dim=-1)
-    x_rotated = x_rotated.reshape(x.shape)
+    x_rotated = x_rotated.reshape(x_fp32.shape)
 
-    return x_rotated
+    return x_rotated.to(orig_dtype)
 
 
 def main():

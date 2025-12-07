@@ -126,15 +126,15 @@ if __name__ == "__main__":
     custom_model.eval()
     # 传入 tt_tokens
     freqs_cis = precompute_freqs_cis(
-        4096 // 32, len(tt_tokens), theta=500000, device=device, dtype=torch.bfloat16
+        4096 // 32, len(tt_tokens), theta=500000, device=device, dtype=torch.float32
     )
     causal_mask = (
         torch.triu(
             torch.full(
                 (len(tt_tokens), len(tt_tokens)),
-                float("-inf"),
+                -1e9,
                 device=device,
-                dtype=torch.bfloat16,
+                dtype=torch.float32,
             ),
             diagonal=1,
         )

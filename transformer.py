@@ -94,18 +94,21 @@ class Attention(nn.Module):
         )  # (batch_size, heads, seq_len, head_dim)
 
         # 计算注意力分数
+        q_multi = q_multi.float()
+        k_multi = k_multi.float()
+        v_multi = v_multi.float()
         scores = (
             q_multi @ k_multi.transpose(-2, -1) / math.sqrt(self.head_dim)
         )  # (batch_size, heads, seq_len, seq_len)
 
         # 应用掩码
         if mask is not None:
-            scores = scores + mask
+            scores = scores + mask.to(scores.dtype)
 
         # 应用softmax和dropout
         attn_weights = F.softmax(
-            scores.float(), dim=-1
-        ).to(scores.dtype)  # (batch_size, heads, seq_len, seq_len)
+            scores, dim=-1
+        )  # (batch_size, heads, seq_len, seq_len)
         attn_weights = self.dropout(attn_weights)
 
         # 加权求和
@@ -115,7 +118,7 @@ class Attention(nn.Module):
         output = output.transpose(1, 2).reshape(
             batch_size, seq_len, hidden_size
         )  # (batch_size, seq_len, hidden_size)
-        output = self.w_o(output)  # (batch_size, seq_len, hidden_size)
+        output = self.w_o(output.to(x.dtype))  # (batch_size, seq_len, hidden_size)
 
         return output
 
@@ -161,8 +164,8 @@ class TransformerBlock(nn.Module):
         super().__init__()
         self.attention = Attention(hidden_size, heads, groups, dropout, dtype=dtype)
         self.ffn = FeedForward(hidden_size, ffn_hidden_size, dtype=dtype)
-        self.norm1 = RMSNorm(hidden_size, dtype=dtype)
-        self.norm2 = RMSNorm(hidden_size, dtype=dtype)
+        self.norm1 = RMSNorm(hidden_size, eps=1e-5, dtype=dtype)
+        self.norm2 = RMSNorm(hidden_size, eps=1e-5, dtype=dtype)
 
     def forward(
         self,
