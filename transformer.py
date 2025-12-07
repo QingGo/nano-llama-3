@@ -5,10 +5,9 @@
 from typing import Optional
 import torch
 import torch.nn as nn
-import math
 import torch.nn.functional as F
 
-from util import RMSNorm, SwiGLU, apply_rotary_emb, precompute_freqs_cis
+from util import RMSNorm, SwiGLU, apply_rotary_emb
 
 
 class Attention(nn.Module):
@@ -52,7 +51,7 @@ class Attention(nn.Module):
     def forward(
         self,
         x: torch.Tensor,
-        freqs_cis: Optional[torch.Tensor] = None,
+        freqs_cis: Optional[tuple[torch.Tensor, torch.Tensor]] = None,
         mask: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
         """
@@ -82,8 +81,9 @@ class Attention(nn.Module):
 
         # 应用旋转位置编码
         if freqs_cis is not None:
-            q_multi = apply_rotary_emb(q_multi, freqs_cis)
-            k_multi = apply_rotary_emb(k_multi, freqs_cis)
+            cos_half, sin_half = freqs_cis
+            q_multi = apply_rotary_emb(q_multi, cos_half, sin_half)
+            k_multi = apply_rotary_emb(k_multi, cos_half, sin_half)
 
         # 对于GQA，将每组的k和v复制到对应的头
         k_multi = k_multi.repeat_interleave(
@@ -182,47 +182,6 @@ class TransformerBlock(nn.Module):
 
 
 def main():
-    print("Hello from nano-llama-3!")
-
-    # 测试 RMSNorm
-    print("\nTesting RMSNorm:")
-    rms_norm = RMSNorm(dim=10)
-    x = torch.randn(3, 10)
-    print(f"Input shape: {x.shape}")
-    output = rms_norm(x)
-    print(f"Output shape: {output.shape}")
-    print(f"Output: {output}")
-
-    # 测试 SwiGLU
-    print("\nTesting SwiGLU:")
-    swiglu = SwiGLU(dim_in=10, dim_out=5, hidden_dim=20)
-    x = torch.randn(3, 10)
-    print(f"Input shape: {x.shape}")
-    output = swiglu(x)
-    print(f"Output shape: {output.shape}")
-    print(f"Output: {output}")
-
-    # 测试旋转位置编码
-    print("\nTesting Rotary Position Embedding:")
-    batch_size = 2
-    seq_len = 5
-    dim = 4
-
-    # 预计算频率
-    freqs_cis = precompute_freqs_cis(dim=dim, seq_len=seq_len)
-    print(f"Freqs_cis shape: {freqs_cis.shape}")
-    print(f"Freqs_cis: {freqs_cis}")
-
-    # 创建测试输入
-    x = torch.randn(batch_size, seq_len, dim)
-    print(f"Input shape: {x.shape}")
-    print(f"Input: {x}")
-
-    # 应用旋转编码
-    x_rotated = apply_rotary_emb(x, freqs_cis)
-    print(f"Output shape: {x_rotated.shape}")
-    print(f"Output: {x_rotated}")
-
     # 测试注意力模块
     print("\nTesting Attention:")
     attention = Attention(hidden_size=12, heads=4, groups=2)

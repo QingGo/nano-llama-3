@@ -59,7 +59,7 @@ def precompute_freqs_cis(
     theta: float = 10000.0,
     device: torch.device = torch.device("cpu"),
     dtype: torch.dtype = torch.float32,
-) -> torch.Tensor:
+) -> tuple[torch.Tensor, torch.Tensor]:
     """
     预计算旋转位置编码的频率张量
 
@@ -75,16 +75,9 @@ def precompute_freqs_cis(
     # dim必须是偶数，因为旋转是2D分组的
     assert dim % 2 == 0, "dim must be even"
 
-    # 生成dim/2个不同的theta值
-    # theta_i = theta ^ (-2i/dim), i=0,1,...,dim/2-1
-    freqs = 1.0 / (
-        theta
-        ** (
-            # .float() 会导致 dtype 转换，变成 float32
-            torch.arange(0, dim, 2, device=device)[: (dim // 2)].float()
-            / dim
-        )
-    )
+    # 生成 dim/2 个不同的频率：theta_i = theta ^ (-2i/d)
+    half = dim // 2
+    freqs = 1.0 / (theta ** (torch.arange(0, half, device=device).float() / dim))
 
     # 生成位置索引m = 0,1,...,seq_len-1
     t = torch.arange(seq_len, device=device)
@@ -92,23 +85,18 @@ def precompute_freqs_cis(
     # 计算m * theta_i，形状为 (seq_len, dim/2)
     freqs = torch.outer(t, freqs)
 
-    # 计算cos(m*theta_i)和sin(m*theta_i)，并将它们堆叠成最终的频率张量
-    # 最终形状为 (seq_len, dim)
-    # 对于每个位置，偶数索引是cos，奇数索引是sin
+    # 计算 cos(m*theta_i) 与 sin(m*theta_i)
     freqs_cos = torch.cos(freqs.float())
     freqs_sin = torch.sin(freqs.float())
 
-    # 将cos和sin交替堆叠，形成最终的freqs_cis
-    # 例如，对于dim=4，形状变为 (seq_len, 2, 2)，然后reshape为 (seq_len, 4)
-    freqs_cis = torch.stack([freqs_cos, freqs_sin], dim=-1)
-    freqs_cis = freqs_cis.reshape(seq_len, dim)
-
-    return freqs_cis.to(dtype=dtype)
+    # 返回半维度 cos/sin，形状为 (seq_len, dim/2)
+    return freqs_cos.to(dtype=dtype), freqs_sin.to(dtype=dtype)
 
 
-def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
+def apply_rotary_emb(x: torch.Tensor, cos_half: torch.Tensor, sin_half: torch.Tensor) -> torch.Tensor:
     """
-    应用旋转位置编码到输入张量
+    应用旋转位置编码到输入张量，原论文使用 “偶/奇交错维度”配对旋转，
+    这里使用 “前半/后半” 配对旋转。和 Hugging Face 对齐
 
     Args:
         x: 输入张量，形状为 (batch_size, groups/heads, seq_len, head_dim)
@@ -120,30 +108,17 @@ def apply_rotary_emb(x: torch.Tensor, freqs_cis: torch.Tensor) -> torch.Tensor:
     # 确保输入维度是偶数
     assert x.shape[-1] % 2 == 0, "x dimension must be even"
 
-    # 分离偶数和奇数索引的元素
-    # x_even: 形状 (batch_size, seq_len, dim/2)
-    # x_odd: 形状 (batch_size, seq_len, dim/2)
     orig_dtype = x.dtype
     x_fp32 = x.float()
-    x_even = x_fp32[..., ::2]
-    x_odd = x_fp32[..., 1::2]
+    cos_full = torch.cat([cos_half.float(), cos_half.float()], dim=-1)
+    sin_full = torch.cat([sin_half.float(), sin_half.float()], dim=-1)
 
-    # 分离freqs_cis的cos和sin部分
-    # freqs_cos: 形状 (seq_len, dim/2)
-    # freqs_sin: 形状 (seq_len, dim/2)
-    freqs_cos = freqs_cis.float()[..., ::2]
-    freqs_sin = freqs_cis.float()[..., 1::2]
-
-    # 应用旋转公式：
-    # x_rotated_even = x_even * cos - x_odd * sin
-    # x_rotated_odd = x_even * sin + x_odd * cos
-    x_rotated_even = x_even * freqs_cos - x_odd * freqs_sin
-    x_rotated_odd = x_even * freqs_sin + x_odd * freqs_cos
-
-    # 将旋转后的偶数和奇数部分重新组合
-    # 使用stack和reshape来恢复原始形状
-    x_rotated = torch.stack([x_rotated_even, x_rotated_odd], dim=-1)
-    x_rotated = x_rotated.reshape(x_fp32.shape)
+    # 旋转公式：x * cos + rotate_half(x) * sin
+    half = x_fp32.shape[-1] // 2
+    x1 = x_fp32[..., :half]
+    x2 = x_fp32[..., half:]
+    rotated = torch.cat([-x2, x1], dim=-1)
+    x_rotated = x_fp32 * cos_full + rotated * sin_full
 
     return x_rotated.to(orig_dtype)
 
@@ -177,7 +152,7 @@ def main():
 
     # 预计算频率
     freqs_cis = precompute_freqs_cis(dim=dim, seq_len=seq_len)
-    print(f"Freqs_cis shape: {freqs_cis.shape}")
+    print(f"Freqs_cis shape: {freqs_cis[0].shape}, {freqs_cis[1].shape}")
     print(f"Freqs_cis: {freqs_cis}")
 
     # 创建测试输入
@@ -186,6 +161,6 @@ def main():
     print(f"Input: {x}")
 
     # 应用旋转编码
-    x_rotated = apply_rotary_emb(x, freqs_cis)
+    x_rotated = apply_rotary_emb(x, freqs_cis[0], freqs_cis[1])
     print(f"Output shape: {x_rotated.shape}")
     print(f"Output: {x_rotated}")
