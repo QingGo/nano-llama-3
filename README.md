@@ -82,6 +82,10 @@ uv run python generate.py
 - safetensors 加载：使用 `safe_open` 只读元数据/分片，`map_weight_name` 建立官方 key 到自研 key 的一一映射。
 - 设备策略：`meta` + `to_empty(device)` 避免多余初始化与双份内存占用。
 - 代码位置：`llama.py:17-74`（模型结构），`llama.py:153-190`（权重加载）。
+- 发现有许多之前理解不到位的地方：
+  1. FFN 层完全只使用 SwiGLU 实现，中间层不是隐藏层的 4 倍，而是一个自定义参数。SwiGLU 里面也不需要 bias。
+  2. QKV/O 矩阵投影时，都不需要加 bias，理论上似乎是会对乘性的 RoPE 造成干扰，而且 RMSNorm 也证明 bias 不重要。K/V 投影矩阵维度为 (1024, 4096)，符合预期。
+  3. 词典大小实际是 128256，而不是整的 128k。包含特殊字符 256 个。
 
 ### Day 5：Tokenizer 与数值对齐
 
@@ -92,6 +96,18 @@ uv run python generate.py
   - 自研模型前向：`generate.py:129-148`
   - HF 模型前向：`generate.py:161-176`
   - 取下一 token 的 logits 并比较 MSE：`generate.py:183-195`
+- 通过实践，也是学习到一些新的注意点：
+  1. 模型的 tensor 在互相运算时，device/dtype 要注意保持一致，否则会报错。可以显示地在类实例化时传入，或者用上下文管理实现，前者容易改漏。
+  2. llama3 权重参数时 BFloat16，加载时也需要同样用 BFloat16，如果没有实现量化方法，不能简单地降低精度。在某些计算补充，为了保持精度，可以用 float32，后续需要转换回 BFloat16。
+  3. 加载大模型参数时，最好一开始就放在 GPU，而不是先放 CPU 再 to(device)，消耗两份内存。还有一个技巧是防止 meta device + to_empty(device)，避免无意义的参数初始化。
+  4. transformers.AutoTokenizer 分词时会自动加上 <|begin_of_text|> 这个特殊 token，tiktoken 则不会。前者词表大小口径不包含特色 token，后者包含。
+  5. RoPE 应该传入单头大小 head_dim 而不是隐藏层大小 hidden_size。
+  6. **因果掩码会极大地影响所有 logits 的输出，但是没有用因果掩码获得的下一个词也是合理的，这块可以后续想想原因。**
+  7. **Llama 的 RoPE 是 使用 “前半/后半” 配对旋转，而不是“偶/奇交错维度”配对旋转。需要对齐。 这个影响中等。**
+  8. **RoPE 实现时，角度的公式应该是 $\theta_i = 10000^{-2(i-1)/d}, i \in \left[ 1, 2, \dots, \frac{d}{2} \right]$ ，忘记给 d 除以 2 了。这个影响较小，但改完以后终于对齐了。**
+  9. 加载 safetensors 时，开机第一次加载会特别慢，之后重新运行加载就会很快，我理解是操作系统缓存导致的。
+  10. 使用 `x_scaled = (x_fp32 / rms) * self.weight.float(); x_scaled.to(orig_dtype)` 实现后误差还变大了，后面又改回来了。`x_norm = x_fp32 / rms; x_norm.to(orig_dtype) * self.weight`
+  11. 使用 F.scaled_dot_product_attention 没有明显的效果，也改回来了。
 
 ## 关键实现一览
 
