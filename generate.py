@@ -130,7 +130,12 @@ if __name__ == "__main__":
     )
     causal_mask = (
         torch.triu(
-            torch.full((len(tt_tokens), len(tt_tokens)), float("-inf"), device=device),
+            torch.full(
+                (len(tt_tokens), len(tt_tokens)),
+                float("-inf"),
+                device=device,
+                dtype=torch.bfloat16,
+            ),
             diagonal=1,
         )
         .unsqueeze(0)
