@@ -144,7 +144,7 @@ if __name__ == "__main__":
     )
     with torch.no_grad():
         tt_input_tensor = torch.tensor([tt_tokens], device=device)
-        tt_output = custom_model(tt_input_tensor, freqs_cis, None)
+        tt_output = custom_model(tt_input_tensor, freqs_cis, causal_mask)
         print(tt_output)
     # 从 内存卸载 custom_model
     del custom_model

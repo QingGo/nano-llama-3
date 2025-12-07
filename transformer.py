@@ -6,6 +6,7 @@ from typing import Optional
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import math
 
 from util import RMSNorm, SwiGLU, apply_rotary_emb
 
@@ -81,9 +82,8 @@ class Attention(nn.Module):
 
         # 应用旋转位置编码
         if freqs_cis is not None:
-            cos_half, sin_half = freqs_cis
-            q_multi = apply_rotary_emb(q_multi, cos_half, sin_half)
-            k_multi = apply_rotary_emb(k_multi, cos_half, sin_half)
+            q_multi = apply_rotary_emb(q_multi, freqs_cis[0], freqs_cis[1])
+            k_multi = apply_rotary_emb(k_multi, freqs_cis[0], freqs_cis[1])
 
         # 对于GQA，将每组的k和v复制到对应的头
         k_multi = k_multi.repeat_interleave(
@@ -93,18 +93,26 @@ class Attention(nn.Module):
             self.heads // self.groups, dim=1
         )  # (batch_size, heads, seq_len, head_dim)
 
+        # 计算注意力分数
         q_multi = q_multi.float()
         k_multi = k_multi.float()
         v_multi = v_multi.float()
-        spda_dropout = self.dropout.p if self.training else 0.0
-        output = F.scaled_dot_product_attention(
-            q_multi,
-            k_multi,
-            v_multi,
-            attn_mask=None,
-            dropout_p=spda_dropout,
-            is_causal=True,
-        )
+        scores = (
+            q_multi @ k_multi.transpose(-2, -1) / math.sqrt(self.head_dim)
+        )  # (batch_size, heads, seq_len, seq_len)
+
+        # 应用掩码
+        if mask is not None:
+            scores = scores + mask.to(scores.dtype)
+
+        # 应用softmax和dropout
+        attn_weights = F.softmax(
+            scores, dim=-1
+        )  # (batch_size, heads, seq_len, seq_len)
+        attn_weights = self.dropout(attn_weights)
+
+        # 加权求和
+        output = attn_weights @ v_multi  # (batch_size, heads, seq_len, head_dim)
 
         # 合并头并应用输出投影
         output = output.transpose(1, 2).reshape(
